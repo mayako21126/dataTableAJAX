@@ -1,6 +1,6 @@
 <template>
   <div>
-    <my-table :sdata="dataA"></my-table>
+    <my-table :sdata="dataA"> </my-table>
   </div>
 </template>
 <script type="text/ecmascript-6">
