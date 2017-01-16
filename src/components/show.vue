@@ -15,11 +15,20 @@
       return {
         dataA: {
           //url可以用tab.json
-          url: 'http://localhost:8081/school/WebSite/admin/components/tab.json',
+          url: 'http://localhost:8081/dataTableAjax/src/components/tab.json',
           httpData: {PowerID: 0},
           currentPage: 1,
           total: 150,
           pageSize: 5,
+          columns: [
+            {"prop":"date","label":"日期","width":150,"fixed":"left"},
+            {"prop":"name","label":"名字","width":200,"fixed":false},
+            {"prop":"province","label":"省份","width":200,"fixed":false},
+            {"prop":"city","label":"市区","width":200,"fixed":false},
+            {"prop":"address","label":"地址","width":400,"fixed":false},
+            {"prop":"zip","label":"邮编","width":150,"fixed":false},
+            {"prop":"action","label":"操作","fixed":"right","action":true,"min-width":150}
+          ],
           search: [
             {name: "input", value: "搜索框"},
             {name: "input2", value: "搜索框"},
@@ -85,13 +94,14 @@
           ],
           buttons: [{
             name: '查看',
-            action: function (a, b) {
+            action: function (a, b,c) {
+              console.log(a,b,c)
               window.alert(a)
             }
           }, {
             name: '删除',
             action: function (a, b, c) {
-              c._self.tableData.splice(a, 1)
+              c.store.table.tableData.splice(a, 1)
             }
           }],
           tableData: [{

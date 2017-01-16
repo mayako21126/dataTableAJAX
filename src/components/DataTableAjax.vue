@@ -1,11 +1,5 @@
 <template>
   <div style="margin: 15px">
-    <!--<el-row :gutter="20">-->
-    <!--<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>-->
-    <!--<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>-->
-    <!--<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>-->
-    <!--<el-col :span="6"><div class="grid-content bg-purple"></div></el-col>-->
-    <!--</el-row>-->
     <el-row :gutter="20">
       <el-col :span="6" v-for="(input, key) in inputs" style="margin-bottom: 15px">
         <label for="" v-if="input.label">{{input.name}}</label>
@@ -32,48 +26,28 @@
       :data="tableData"
       height="250"
       border
-      style="width: 100%">
-      <el-table-column
-        fixed
-        prop="date"
-        label="日期"
-        width="150">
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="姓名"
-        width="120">
-      </el-table-column>
-      <el-table-column
-        prop="province"
-        label="省份"
-        width="120">
-      </el-table-column>
-      <el-table-column
-        prop="city"
-        label="市区"
-        width="120">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址"
-        width="300">
-      </el-table-column>
-      <el-table-column
-        prop="zip"
-        label="邮编"
-        width="120">
-      </el-table-column>
-      <el-table-column
+    >
 
-        label="操作"
-        width="100">
-        <template scope="scope">
-          <el-button type="text" size="small" v-for="button in buttons"
-                     @click="button.action(scope.$index, scope.row,scope)">{{button.name}}
-          </el-button>
+      <el-table-column v-for="(column,key) in columns"
+                       :fixed="column.fixed"
+                       :prop="column.prop"
+                       :label="column.label"
+                       :width="column.width"
+      >
+        <template scope="scope" >
+          <div v-if="column.action">
+            <el-button type="text" size="small" v-for="button in buttons"
+                       @click="button.action(scope.$index, scope.row,scope)">{{button.name}}
+            </el-button>
+          </div>
+          <div v-else>
+            {{scope.row[column.prop]}}
+          </div>
+
         </template>
+
       </el-table-column>
+
     </el-table>
 
     <div class="block">
@@ -93,21 +67,69 @@
 </template>
 
 <script type="text/ecmascript-6">
+  /**
+   * Created by mayako on 2017/1/5.
+   */
+  function authCode(req){
+    console.log(req)
+    var data;
+    if(typeof req.body == "object"){
+      data = req.body
+    }else{
+      data = JSON.parse(req.body);
+    }
+
+    var result;
+    switch (data.errorCode){
+      case "-1006":result=false;break;
+      case "-1007":result=false;break;
+      case "-1008":result=false;break;
+      case "-1009":result=false;break;
+      case "1":result=true;break;
+    }
+    return result;
+
+  }
+  function formatBody (res){
+    var data;
+    if(typeof res.body == "object"){
+      data = res.body
+    }else{
+      data = JSON.parse(res.body);
+    }
+    return data;
+  }
+
   export default {
     props: ['sdata'],
-    mounted: function () {
+    mounted:  function () {
       this.$nextTick(function () {
-       // console.log(JSON.parse(JSON.stringify(this.$data)))
-        this.buttons=this.sdata.buttons
-        this.currentPage= this.sdata.currentPage
-        this.httpData= this.sdata.httpData
-        this.pageSize= this.sdata.pageSize
-        this.search= this.sdata.search
-        this.tableData= this.sdata.tableData
-        this.inputs= this.sdata.inputs
-        this.tempSearch= this.sdata.tempSearch
-        this.total= this.sdata.total
-        this.url= this.sdata.url||"http://localhost:8081/school/WebSite/admin/components/tab.json"
+        var httpDataD=JSON.parse(JSON.stringify(this.sdata.httpData));
+        for (var i in this.sdata.search) {
+          httpDataD[this.sdata.search[i].name] = this.sdata.search[i].value
+        }
+        httpDataD['currentPage'] = this.sdata.currentPage;
+        httpDataD['pageSize'] = this.sdata.pageSize;
+        this.$http.post(this.sdata.url, httpDataD).then(function (res) {
+          if (!authCode(res)) {
+            return false;
+          } else {
+            var data = formatBody(res);
+            console.log(this);
+            this.tableData = data.data.tableData;
+            this.pageSize = this.sdata.pageSize;
+            this.currentPage = this.sdata.currentPage;
+            this.total = data.data.total;
+            this.httpData= this.sdata.httpData;
+            this.search= this.sdata.search;
+            this.inputs= this.sdata.inputs;
+            this.tempSearch= this.sdata.tempSearch;
+            this.columns = this.sdata.columns;
+            this.buttons=this.sdata.buttons;
+            this.url= this.sdata.url||"http://localhost:8081/school/WebSite/admin/components/tab.json";
+            console.log(this.dataA)
+          }
+        })
         console.log(this.$data)
       })
     },
@@ -144,8 +166,8 @@
             } else {
               data = JSON.parse(res.body)
             }
-            vm.tableData = data.tableData;
-            vm.total = data.total;
+            vm.tableData = data.data.tableData;
+            vm.total = data.data.total;
           }, function (res) {
 
           }
@@ -171,6 +193,7 @@
         currentPage: 1,
         total: 150,
         pageSize: 5,
+        columns:[],
         tempSearch: [
 
         ],
@@ -184,3 +207,8 @@
     }
   }
 </script>
+<style>
+  .el-table__body-wrapper .el-table__body{
+    margin-left: -1px;
+  }
+</style>
