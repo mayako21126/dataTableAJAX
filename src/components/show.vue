@@ -1,6 +1,6 @@
 <template>
   <div>
-    <my-table :sdata="dataA"> </my-table>
+    <my-table :sdata="dataA" style="width: 1200px"> </my-table>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -13,184 +13,105 @@
     methods: {},
     data: function () {
       return {
+        dialogVisible: false,
+        formData:{
+          ClassroomID:"",
+          ClassroomName:"",
+          ClassroomTip:""
+        },
         dataA: {
-          //url可以用tab.json
-          url: 'http://localhost:8081/dataTableAjax/src/components/tab.json',
-          httpData: {PowerID: 0},
-          currentPage: 1,
-          total: 150,
-          pageSize: 5,
+          url: "http://115.28.200.119:8001/" + 'Admin_2000.ashx',
+          httpData: {PowerID: 2302},
+          currentPage: 0,
+          total: 10,
+          pageSize: 6,
           columns: [
-            {"prop":"date","label":"日期","width":150,"fixed":"left"},
-            {"prop":"name","label":"名字","width":200,"fixed":false},
-            {"prop":"province","label":"省份","width":200,"fixed":false},
-            {"prop":"city","label":"市区","width":200,"fixed":false},
-            {"prop":"address","label":"地址","width":400,"fixed":false},
-            {"prop":"zip","label":"邮编","width":150,"fixed":false},
-            {"prop":"action","label":"操作","fixed":"right","action":true,"min-width":150}
+            {"prop": "Num", "label": "编号", "width": 150, "fixed": true},
+            {"prop": "ClassroomID", "label": "教室编号", "width": 200, "fixed": false},
+            {"prop": "ClassroomName", "label": "教室名称", "width": 200, "fixed": false},
+            {"prop": "ClassroomTip", "label": "教室描述", "width": 500, "fixed": false},
+            {"prop": "action", "label": "操作", "fixed": false, "action": true, "min-width": 150}
           ],
           search: [
-            {name: "input", value: "搜索框"},
-            {name: "input2", value: "搜索框"},
-            {name: "select", value: "2"},
-            {name: "date", value: ""}
+            {
+              name: "SearchKey",
+              value: ""
+            }
           ],
           tempSearch: [
-            {name: "input", value: "搜索框"},
-            {name: "input2", value: "搜索框"},
-            {name: "select", value: "2"},
-            {name: "date", value: ""}
+            {
+              name: "SearchKey",
+              value: ""
+            }
           ],
           inputs: [
             {
-              name: "搜索框",
+//							name: "搜索1",
               input: true,
               select: false,
               date: false,
               label: true,
-              value: "input"
+              value: "SearchKey"
             },
             {
-              name: "搜索框2",
-              input: true,
-              select: false,
-              date: false,
-              label: true,
-              value: "input2"
-            },
-            {
-              name: "选择框",
-              input: false,
-              select: true,
-              date: false,
-              label: true,
-              options: [{
-                value: '1',
-                label: '黄1金糕'
-              }, {
-                value: '2',
-                label: '双1皮奶'
-              }, {
-                value: '3',
-                label: '蚵1仔煎'
-              }, {
-                value: '4',
-                label: '龙1须面'
-              }]
-            },
-            {
-              name: "日期选择",
-              input: false,
-              select: false,
-              date: true,
-              label: true,
-              value: ""
-            },
-            {
-              name: "检索",
+              name: "搜索",
               button: true,
               label: false
-            }
-          ],
+            }],
           buttons: [{
-            name: '查看',
-            action: function (a, b,c) {
-              console.log(a,b,c)
-              window.alert(a)
+            name: '编辑',
+            vm:this,
+            action: function (a, b, c) {
+              this.vm.dialogVisible = true
+              this.vm.formData.ClassroomID= b.ClassroomID;
+              this.vm.formData.ClassroomName= b.ClassroomName;
+              this.vm.formData.ClassroomTip= b.ClassroomTip;
+
             }
           }, {
             name: '删除',
             action: function (a, b, c) {
               c.store.table.tableData.splice(a, 1)
             }
+          },{
+            name: '添加',
+            action: function (a, b, c) {
+              // console.log(JSON.stringify(c.store.table.tableData))
+              c.store.table.tableData.push({"Num":99,"ClassroomID":16,"ClassroomName":"1206","ClassroomTip":"123"})
+            }
           }],
-          tableData: [{
-            date: '2016-05-03',
-            name: '王小3虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }, {
-            date: '2016-05-02',
-            name: '王小3虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }]
+          tableData: []
+
         }
+
       }
+
+    },
+    mounted: function () {
+      this.$nextTick(function () {
+//				this.$http.post(host + 'Admin.ashx', {
+//					PowerID: 2302,
+//					pageSize: 10,
+//					currentPage: 0,
+//					SearchKey: ''
+//				}).then(function (res) {
+////					alert(res);
+//					if (!authCode(res)) {
+//						return false;
+//					} else {
+//						var data = formatBody(res)
+//						console.log(data)
+//						this.dataA.tableData = data.data.tableData;
+//						console.log(JSON.stringify(this.dataA.tableData))
+//						this.dataA.pageSize = 10;
+//						this.dataA.currentPage = data.data.currentPage;
+//						this.dataA.total = data.data.total;
+//						console.log(this.dataA)
+//					}
+//
+//
+//				})
+      })
     }
   }
 </script>

@@ -118,7 +118,6 @@
             console.log(this);
             this.tableData = data.data.tableData;
             this.pageSize = this.sdata.pageSize;
-            this.currentPage = this.sdata.currentPage;
             this.total = data.data.total;
             this.httpData= this.sdata.httpData;
             this.search= this.sdata.search;
@@ -127,7 +126,7 @@
             this.columns = this.sdata.columns;
             this.buttons=this.sdata.buttons;
             this.url= this.sdata.url||"http://localhost:8081/school/WebSite/admin/components/tab.json";
-            console.log(this.dataA)
+            this.currentPage = this.sdata.currentPage+1;
           }
         })
         console.log(this.$data)
@@ -149,7 +148,7 @@
         var _isSearch = true;
         var vm = this;
         var data = JSON.parse(JSON.stringify(this.httpData))
-        data['currentPage'] = currentPage;
+        data['currentPage'] = currentPage-1;
         data['pageSize'] = this.pageSize;
         if (_isSearch == true) {
           for (var i in this.search) {
