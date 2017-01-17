@@ -116,9 +116,7 @@
           } else {
             var data = formatBody(res);
             console.log(this);
-            this.tableData = data.data.tableData;
             this.pageSize = this.sdata.pageSize;
-            this.total = data.data.total;
             this.httpData= this.sdata.httpData;
             this.search= this.sdata.search;
             this.inputs= this.sdata.inputs;
@@ -127,9 +125,16 @@
             this.buttons=this.sdata.buttons;
             this.url= this.sdata.url||"http://localhost:8081/school/WebSite/admin/components/tab.json";
             this.currentPage = this.sdata.currentPage+1;
+            this.total = data.data.total;
+            var tmp = this;
+            setTimeout(function(){
+              tmp.tableData = data.data.tableData;
+              // tmp.request(tmp.currentPage)
+            },200)
+            console.log(this.$data)
           }
         })
-        console.log(this.$data)
+      
       })
     },
     methods: {
