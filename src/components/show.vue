@@ -62,6 +62,7 @@
             name: '编辑',
             vm:this,
             action: function (a, b, c) {
+              console.log(c)
               this.vm.dialogVisible = true
               this.vm.formData.ClassroomID= b.ClassroomID;
               this.vm.formData.ClassroomName= b.ClassroomName;

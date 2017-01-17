@@ -1,5 +1,5 @@
-<template>
-  <div style="margin: 15px">
+<template scope>
+  <div style="margin: 15px" id="tableDataAjax">
     <el-row :gutter="20">
       <el-col :span="6" v-for="(input, key) in inputs" style="margin-bottom: 15px">
         <label for="" v-if="input.label">{{input.name}}</label>
@@ -134,7 +134,7 @@
             console.log(this.$data)
           }
         })
-      
+
       })
     },
     methods: {
