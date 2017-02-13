@@ -26,21 +26,26 @@
   import barTop from '../components/DataTableAjax.vue';
   import Mock from 'mockjs';
   Mock.mock(/\.json/, {
-    'userlist|1-10': [{
-      'id|+1': 1,
-      'name': '@ctitle(3)',
-      'phone': '13573547784',
-      'city':'青岛',
-      'proxy':'xx',
-      'pm25|+1':35,
-      'air':'优秀',
-      'list|1-3':[{
-        'itemName':'123asd ',
-        'size':'333',
-        'days':'30',
-        'action':''
+    'errorCode':'1',
+    'data':{
+      'currentPage':1,
+      'total':30,
+      'tableData|10': [{
+        'id|+1': 1,
+        'name': '@ctitle(3)',
+        'phone': '13573547784',
+        'city':'青岛',
+        'proxy':'xx',
+        'pm25|+1':35,
+        'air':'优秀',
+        'list|1-3':[{
+          'itemName':'@ctitle(4) ',
+          'size':'4*20',
+          'days':'@natural(60, 365)',
+          'action':''
+        }]
       }]
-    }]
+    }
   })
   export default{
     components: {
@@ -59,7 +64,7 @@
           ClassroomTip:""
         },
         dataA: {
-          url: "http://115.28.200.119:8001/" + 'Admin_2000.ashx',
+          url: "http://115.28.200.119:8001/" + 'Admin_2000.json',
           httpData: {PowerID: 2302},
           currentPage: 0,
           total: 10,
@@ -74,11 +79,13 @@
             return table;
           },
           columns: [
-            {"prop": "Num", "label": "编号", "width": 150, "fixed": true},
-            {"prop": "ClassroomID", "label": "教室编号", "width": 200, "fixed": false},
-            {"prop": "ClassroomName", "label": "教室名称", "width": 200, "fixed": false},
-            {"prop": "ClassroomTip", "label": "教室描述", "width": 500, "fixed": false},
-            {"prop": "action", "label": "操作", "fixed": false, "action": true, "min-width": 150}
+            {"prop": "id", "label": "编号", "width": 150, "fixed": false},
+            {"prop": "name", "label": "用户名", "width": 100, "fixed": false},
+            {"prop": "phone", "label": "电话", "width": 200, "fixed": false},
+            {"prop": "city", "label": "城市", "min-width": 100, "fixed": false},
+            {"prop": "proxy", "label": "代理商", "width": 150, "fixed": false},
+            {"prop": "pm25", "label": "pm2.5", "width": 100, "fixed": false},
+            {"prop": "air", "label": "空气质量", "width": 150, "fixed": false},
           ],
           search: [
             {

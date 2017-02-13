@@ -26,7 +26,18 @@
       :data="tableData"
       height="250"
       border
+
     >
+      <el-table-column type="expand">
+        <template scope="props" >
+          <div v-for="(item, index) in props.row.list" style="border-bottom: 1px solid rgba(55,55,55,0.5);width: 100%">
+            <span>产品名: {{ item.itemName }}</span>
+            <span>规格: {{ item.size }}</span>
+            <span>剩余天数: {{ item.days }}</span>
+            <a><button>查看数据</button></a>
+          </div>
+        </template>
+      </el-table-column>
 
       <el-table-column v-for="(column,key) in columns"
                        :fixed="column.fixed"
@@ -117,10 +128,12 @@
         httpDataD['currentPage'] = this.sdata.currentPage;
         httpDataD['pageSize'] = this.sdata.pageSize;
         this.$http.post(this.sdata.url, httpDataD).then(function (res) {
+          console.log(res)
           if (!authCode(res)) {
             return false;
           } else {
             var data = formatBody(res);
+            console.log(data)
             console.log(this);
             this.pageSize = this.sdata.pageSize;
             this.httpData= this.sdata.httpData;
