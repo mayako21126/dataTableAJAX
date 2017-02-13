@@ -102,7 +102,13 @@
 
   export default {
     props: ['sdata'],
+    filters:{
+      tableFilters:function(table){
+        return table;
+      }
+    },
     mounted:  function () {
+      var self = this;
       this.$nextTick(function () {
         var httpDataD=JSON.parse(JSON.stringify(this.sdata.httpData));
         for (var i in this.sdata.search) {
@@ -128,7 +134,11 @@
             this.total = data.data.total;
             var tmp = this;
             setTimeout(function(){
-              tmp.tableData = data.data.tableData;
+              if(tmp.sdata.filter){
+                tmp.tableData = tmp.sdata.filter(data.data.tableData);
+              }else{
+                tmp.tableData = data.data.tableData;
+              }
               // tmp.request(tmp.currentPage)
             },200)
             console.log(this.$data)
@@ -170,7 +180,11 @@
             } else {
               data = JSON.parse(res.body)
             }
-            vm.tableData = data.data.tableData;
+            if(vm.sdata.filter){
+              vm.tableData = vm.sdata.filter(data.data.tableData);
+            }else{
+              vm.tableData = data.data.tableData;
+            }
             vm.total = data.data.total;
           }, function (res) {
 

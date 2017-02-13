@@ -1,6 +1,25 @@
 <template>
   <div>
     <my-table :sdata="dataA" style="width: 1200px"> </my-table>
+    <el-dialog title="温馨提示:" v-model="dialogVisible" size="tiny">
+      <el-form label-position="top" :model="formData" class="demo-form-stacked">
+        <el-form-item label="角色编号">
+          <el-input v-model="formData.ClassroomID" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="角色名称">
+          <el-input v-model="formData.ClassroomName"></el-input>
+        </el-form-item>
+        <el-form-item label="角色描述">
+          <el-input v-model="formData.ClassroomTip"></el-input>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+    <el-dialog title="温馨提示:" v-model="dialogVisible2" size="tiny">
+      <el-form label-position="top" :model="formData" class="demo-form-stacked">
+        <button v-if="ban">封停</button>
+        <button v-if="recover">恢复</button>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -14,6 +33,9 @@
     data: function () {
       return {
         dialogVisible: false,
+        dialogVisible2: false,
+        ban:false,
+        recover:false,
         formData:{
           ClassroomID:"",
           ClassroomName:"",
@@ -25,6 +47,15 @@
           currentPage: 0,
           total: 10,
           pageSize: 6,
+          filter:function (table){
+            var _table;
+            for(let item of table){
+              if(item.ClassroomName =='111'||item.ClassroomName =='333a'){
+                item.ClassroomName ='未命名'
+              }
+            }
+            return table;
+          },
           columns: [
             {"prop": "Num", "label": "编号", "width": 150, "fixed": true},
             {"prop": "ClassroomID", "label": "教室编号", "width": 200, "fixed": false},
@@ -67,6 +98,22 @@
               this.vm.formData.ClassroomID= b.ClassroomID;
               this.vm.formData.ClassroomName= b.ClassroomName;
               this.vm.formData.ClassroomTip= b.ClassroomTip;
+
+            }
+          },{
+            name: '状态',
+            vm:this,
+            action: function (a, b, c) {
+              this.vm.dialogVisible2 = true;
+              console.log(b.ClassroomID)
+              if(b.ClassroomID=='120'){
+                this.vm.ban=true;
+                this.vm.recover =true;
+              }else{
+                this.vm.ban = true;
+                this.vm.recover = false;
+              }
+
 
             }
           }, {
