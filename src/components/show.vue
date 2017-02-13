@@ -24,7 +24,24 @@
 </template>
 <script type="text/ecmascript-6">
   import barTop from '../components/DataTableAjax.vue';
-
+  import Mock from 'mockjs';
+  Mock.mock(/\.json/, {
+    'userlist|1-10': [{
+      'id|+1': 1,
+      'name': '@ctitle(3)',
+      'phone': '13573547784',
+      'city':'青岛',
+      'proxy':'xx',
+      'pm25|+1':35,
+      'air':'优秀',
+      'list|1-3':[{
+        'itemName':'123asd ',
+        'size':'333',
+        'days':'30',
+        'action':''
+      }]
+    }]
+  })
   export default{
     components: {
       'my-table': barTop
