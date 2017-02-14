@@ -24,17 +24,20 @@
     </el-row>
     <el-table
       :data="tableData"
-      :height="height"
+
       border
 
     >
       <el-table-column type="expand" v-if="expand">
         <template scope="props" >
           <div v-for="(item, index) in props.row.list" style="width: 100%" class="datatableBox">
-            <div class="item">产品名: {{ item.itemName }}</div>
-            <div class="item">规格: {{ item.size }}</div>
-            <div class="item">剩余天数: {{ item.days }}</div>
-            <div class="item"><el-button type="info">查看数据</el-button></div>
+
+            <div class="item" v-for="attr in item" >
+              <el-button type="info" v-if="attr.action"><a :href="attr.value">查看数据</a></el-button>
+              <span v-else="">{{attr.name}}: {{ attr.value }}</span>
+
+            </div>
+
           </div>
         </template>
       </el-table-column>
@@ -259,4 +262,11 @@
 
     /* flex-grow定义该项目不分配剩余空间 */
   }
+  .datatableBox a{
+    color: white;
+  }
+  .datatableBox a:link{color:white}
+  .datatableBox a:active{color:white}
+  .datatableBox a:visited{color:white}
+  .datatableBox a:hover{color:white}
 </style>
