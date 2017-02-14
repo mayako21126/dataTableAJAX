@@ -24,17 +24,17 @@
     </el-row>
     <el-table
       :data="tableData"
-      height="250"
+      :height="height"
       border
 
     >
-      <el-table-column type="expand">
+      <el-table-column type="expand" v-if="expand">
         <template scope="props" >
-          <div v-for="(item, index) in props.row.list" style="border-bottom: 1px solid rgba(55,55,55,0.5);width: 100%">
-            <span>产品名: {{ item.itemName }}</span>
-            <span>规格: {{ item.size }}</span>
-            <span>剩余天数: {{ item.days }}</span>
-            <a><button>查看数据</button></a>
+          <div v-for="(item, index) in props.row.list" style="width: 100%" class="datatableBox">
+            <div class="item">产品名: {{ item.itemName }}</div>
+            <div class="item">规格: {{ item.size }}</div>
+            <div class="item">剩余天数: {{ item.days }}</div>
+            <div class="item"><el-button type="info">查看数据</el-button></div>
           </div>
         </template>
       </el-table-column>
@@ -82,7 +82,6 @@
    * Created by mayako on 2017/1/5.
    */
   function authCode(req){
-    console.log(req)
     var data;
     if(typeof req.body == "object"){
       data = req.body
@@ -133,8 +132,7 @@
             return false;
           } else {
             var data = formatBody(res);
-            console.log(data)
-            console.log(this);
+            this.height = this.sdata.height||250;
             this.pageSize = this.sdata.pageSize;
             this.httpData= this.sdata.httpData;
             this.search= this.sdata.search;
@@ -142,9 +140,11 @@
             this.tempSearch= this.sdata.tempSearch;
             this.columns = this.sdata.columns;
             this.buttons=this.sdata.buttons;
+            this.expand =this.sdata.expand||false;
             this.url= this.sdata.url||"http://localhost:8081/school/WebSite/admin/components/tab.json";
             this.currentPage = this.sdata.currentPage+1;
             this.total = data.data.total;
+            console.log(this)
             var tmp = this;
             setTimeout(function(){
               if(tmp.sdata.filter){
@@ -225,6 +225,7 @@
         total: 150,
         pageSize: 5,
         columns:[],
+        expand:false,
         tempSearch: [
 
         ],
@@ -241,5 +242,21 @@
 <style>
   .el-table__body-wrapper .el-table__body{
     margin-left: -1px;
+  }
+  .datatableBox {
+    display: flex;
+    height: auto;
+    border-bottom: 1px solid rgba(179, 179, 179, 0.5);
+  }
+  .datatableBox:last-child{
+    border-bottom: none;
+  }
+  .datatableBox .item {
+    min-height: 50px;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+
+    /* flex-grow定义该项目不分配剩余空间 */
   }
 </style>

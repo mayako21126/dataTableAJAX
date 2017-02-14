@@ -68,6 +68,8 @@
           httpData: {PowerID: 2302},
           currentPage: 0,
           total: 10,
+          expand:true,
+          height:600,
           pageSize: 6,
           filter:function (table){
             var _table;
@@ -187,3 +189,4 @@
     }
   }
 </script>
+<style></style>
