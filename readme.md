@@ -7,19 +7,17 @@ npm install datatableajax
 
 ##使用
  <my-table :sdata="dataA" style="width: 1200px"></my-table>
- dataA:{
-    "url": "115.28.200.119:8001",
+- {
+    "url": "链接",
     "httpData": {
-        "PowerID": 2302
-    },
+       //参数
+    },
     "currentPage": 0,
     "total": 10,
     "expand": true,
     "height": 600,
     "pageSize": 6,
-    "filter": function(table){
-        returntable;
-    },
+    "filter": {}，//过滤器函数 
     "columns": [
         {
             "prop": "id",
@@ -42,7 +40,7 @@ npm install datatableajax
     ],
     " inputs": [
         {
-            "name": "搜索1",
+            "name": "搜索",
             "input": true,
             "select": false,
             "date": false,
@@ -51,6 +49,6 @@ npm install datatableajax
         }
     ],
     "tableData": [
-        
     ]
 }
+编辑中。。
